@@ -20,13 +20,14 @@ import {
 
 // --- Components ---
 
-const Modal = ({ isOpen, onClose, qrCode, phoneImages, deviceTypes, deviceLayouts, title, description }: { 
+const Modal = ({ isOpen, onClose, qrCode, phoneImages, deviceTypes, deviceLayouts, desktopOffset, title, description }: { 
   isOpen: boolean, 
   onClose: () => void,
   qrCode: string,
   phoneImages: string[],
   deviceTypes?: ('phone' | 'desktop')[],
   deviceLayouts?: ('row' | 'col')[],
+  desktopOffset?: boolean,
   title?: string,
   description?: string
 }) => {
@@ -61,8 +62,8 @@ const Modal = ({ isOpen, onClose, qrCode, phoneImages, deviceTypes, deviceLayout
 
             {/* Left Side: Phone Mockups */}
             <div className="flex-1 bg-slate-50 p-10 md:p-16 lg:p-20 flex items-center justify-center overflow-x-auto">
-              <div className="flex items-center gap-16 md:gap-24">
-                <div className="flex items-center">
+              <div className="flex items-center gap-8 md:gap-12">
+                <div className="flex items-center gap-12 md:gap-16">
                   {phoneImages.filter((_, i) => deviceTypes?.[i] !== 'desktop').map((src, i) => (
                     <div key={`phone-${i}`} className="flex-shrink-0 w-[154px] h-[324px] md:w-[222px] md:h-[470px] bg-slate-900 rounded-[40px] border-[0.5px] border-slate-800 shadow-2xl relative overflow-hidden transition-transform duration-300 hover:scale-130 hover:z-10">
                       <div className="absolute inset-0 bg-emerald-600/10 flex flex-col p-2">
@@ -71,7 +72,7 @@ const Modal = ({ isOpen, onClose, qrCode, phoneImages, deviceTypes, deviceLayout
                     </div>
                   ))}
                 </div>
-                <div className="flex flex-col gap-8 md:gap-12">
+                <div className={`flex flex-col gap-8 md:gap-12 ${desktopOffset ? 'ml-16 md:ml-24' : ''}`}>
                   {phoneImages.filter((_, i) => deviceTypes?.[i] === 'desktop').map((src, i) => (
                     <div key={`desktop-${i}`} className="w-[280px] h-[158px] md:w-[384px] md:h-[216px] bg-slate-900 rounded-xl border-[0.5px] border-slate-800 shadow-2xl relative overflow-hidden transition-transform duration-300 hover:scale-120 hover:z-10">
                       <div className="absolute inset-0 bg-slate-800 flex items-center justify-center p-1">
@@ -188,6 +189,7 @@ export default function App() {
     phoneImages: string[];
     deviceTypes?: ('phone' | 'desktop')[];
     deviceLayouts?: ('row' | 'col')[];
+    desktopOffset?: boolean;
     title?: string;
     description?: string;
   } | null>(null);
@@ -203,6 +205,7 @@ export default function App() {
           phoneImages={modalContent.phoneImages}
           deviceTypes={modalContent.deviceTypes}
           deviceLayouts={modalContent.deviceLayouts}
+          desktopOffset={modalContent.desktopOffset}
           title={modalContent.title}
           description={modalContent.description}
         />
@@ -535,7 +538,7 @@ export default function App() {
                   qrCode: '/PHOTO/酒店码.png',
                   phoneImages: ['/PHOTO/黄小西首页.jpg', '/PHOTO/11(1).png', '/PHOTO/12(1).png'],
                   deviceTypes: ['phone', 'desktop', 'desktop'],
-                  deviceLayouts: ['row', 'col', 'col'],
+                  desktopOffset: true,
                   title: '扫码体验酒店智能体',
                   description: <>使用微信扫描上方二维码<br />开启您的酒店AI数字化转型</>
                 })}
